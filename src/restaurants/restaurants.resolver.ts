@@ -14,7 +14,7 @@ export class RestaurantResolver {
   // async await를 사용할 때는 Promise<>를 사용해야 한다.
   @Mutation((returns) => Boolean)
   async createRestaurant(
-    @Args() createRestaurantDto: CreateRestaurantDto,
+    @Args('input') createRestaurantDto: CreateRestaurantDto,
   ): Promise<boolean> {
     try {
       await this.restaurantService.createRestaurant(createRestaurantDto);
