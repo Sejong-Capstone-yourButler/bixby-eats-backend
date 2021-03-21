@@ -22,5 +22,7 @@ import { Restaurant } from '../entities/restaurant.entity';
 //   ownersName: string;
 // }
 
+// Mapped Type으로 dto를 entity와 연동할 수 있다.
+// entity.ts 파일의 정의대로 dto가 정의된다.
 @InputType()
 export class CreateRestaurantDto extends OmitType(Restaurant, ['id']) {}
