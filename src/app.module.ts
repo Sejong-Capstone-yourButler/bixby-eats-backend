@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
 import { User } from './users/entities/user.entity';
+import { JwtModule } from './jwt/jwt.module';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { User } from './users/entities/user.entity';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
-        SECRET_KEY: Joi.string().required(),
+        PRIVATE_KEY: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -36,9 +37,15 @@ import { User } from './users/entities/user.entity';
       logging: process.env.NODE_ENV !== 'prod', // DB에 무슨 일이 일어나는지 콘솔에 표시하는 거다.
       entities: [User],
     }),
+    // GraphQLModule처럼 설정이 있으면 Dynamic Module이다.
     GraphQLModule.forRoot({
       autoSchemaFile: true,
     }),
+    JwtModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY,
+    }),
+
+    // 밑에 module처럼 설정이 없으면 static module이다.
     UsersModule,
     CommonModule,
   ],
