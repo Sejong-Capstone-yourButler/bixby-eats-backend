@@ -46,7 +46,11 @@ import { JwtMiddleware } from './jwt/jwt.middleware';
     // GraphQLModule처럼 설정이 있으면 Dynamic Module이다.
     GraphQLModule.forRoot({
       autoSchemaFile: true,
-      context: ({ req }) => ({ user: req['user'] }),
+      // Grapql context에 { user : req['user'] }
+      context: ({ req }) => {
+        console.log('GraphQl context');
+        return { user: req['user'] };
+      },
     }),
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
@@ -63,8 +67,10 @@ import { JwtMiddleware } from './jwt/jwt.middleware';
 // function middleware를 사용하고 싶다면 main.ts에서 app.use()를 사용한다.
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    console.log('Before consumer');
     consumer
       .apply(JwtMiddleware)
       .forRoutes({ path: '/graphql', method: RequestMethod.ALL });
+    console.log('After consumer');
   }
 }
