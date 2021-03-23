@@ -13,7 +13,6 @@ import { CommonModule } from './common/common.module';
 import { User } from './users/entities/user.entity';
 import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middleware';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -55,7 +54,6 @@ import { AuthModule } from './auth/auth.module';
 
     // 밑에 module처럼 설정이 없으면 static module이다.
     UsersModule,
-    CommonModule,
   ],
   controllers: [],
   providers: [],
