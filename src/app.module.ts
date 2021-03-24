@@ -67,8 +67,6 @@ import { MailModule } from './mail/mail.module';
 
     // 밑에 module처럼 설정이 없으면 static module이다.
     UsersModule,
-
-    MailModule,
   ],
   controllers: [],
   providers: [],
