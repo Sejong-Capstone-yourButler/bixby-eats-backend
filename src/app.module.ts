@@ -17,6 +17,7 @@ import { MailModule } from './mail/mail.module';
 import { Restaurant } from './restaurants/entities/restaurant.entity';
 import { Category } from './restaurants/entities/category.entity';
 import { RestaurantsModule } from './restaurants/restaurants.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
     }),
 
     // 밑에 module처럼 설정이 없으면 static module이다.
+    AuthModule,
     UsersModule,
     RestaurantsModule,
   ],
