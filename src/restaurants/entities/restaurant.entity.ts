@@ -2,7 +2,7 @@ import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsString, Length } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
 import { Category } from './category.entity';
 
 @InputType('RestaurantInputType', { isAbstract: true }) // Dto를 위한 code
@@ -10,7 +10,7 @@ import { Category } from './category.entity';
 @Entity() // typeORM을 위한 code
 export class Restaurant extends CoreEntity {
   @Field((type) => String) // GraphQL은 Field
-  @Column() // TypeORM은 Column을 사용한다.
+  @Column() // TypeORM은 Column을 사용한다. (DB)
   @IsString()
   @Length(5)
   name: string;
@@ -20,7 +20,7 @@ export class Restaurant extends CoreEntity {
   @IsString()
   coverImg: string;
 
-  @Field((type) => String, { defaultValue: '강남' })
+  @Field((type) => String)
   @Column()
   @IsString()
   address: string;
@@ -37,4 +37,7 @@ export class Restaurant extends CoreEntity {
     onDelete: 'CASCADE',
   })
   owner: User;
+
+  @RelationId((restaurant: Restaurant) => restaurant.owner)
+  ownerId: number;
 }
