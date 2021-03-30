@@ -13,6 +13,7 @@ import {
   DeleteRestaurantInput,
   DeleteRestaurantOutput,
 } from './dtos/delete-restaurant.dto';
+import { EditDishInput, EditDishOutput } from './dtos/edit-dish.dto';
 import {
   EditRestaurantInput,
   EditRestaurantOutput,
@@ -297,6 +298,43 @@ export class RestaurantService {
       return {
         ok: false,
         error: 'Could not create dish',
+      };
+    }
+  }
+
+  async editDish(
+    owner: User,
+    editDishInput: EditDishInput,
+  ): Promise<EditDishOutput> {
+    try {
+      const dish = await this.dishes.findOne(editDishInput.dishId, {
+        relations: ['restaurant'],
+      });
+      if (!dish) {
+        return {
+          ok: false,
+          error: 'Dish not found',
+        };
+      }
+      if (dish.restaurant.ownerId !== owner.id) {
+        return {
+          ok: false,
+          error: "You can't do that.",
+        };
+      }
+      await this.dishes.save([
+        {
+          id: editDishInput.dishId,
+          ...editDishInput,
+        },
+      ]);
+      return {
+        ok: true,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not delete dish',
       };
     }
   }
