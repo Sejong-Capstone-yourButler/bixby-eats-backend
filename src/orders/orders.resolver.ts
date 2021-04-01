@@ -67,9 +67,15 @@ export class OrderResolver {
   }
 
   @Subscription((returns) => String, {
+    // first arg is payload
+    // second arg is variable of resolver below
     filter: ({ readyPotato }, { potatoId }) => {
       return readyPotato === potatoId;
     },
+
+    // resolve는 사용자가 받는 update의 알림의 형태를 바꿔준다.
+    resolve: ({ readyPotato }) =>
+      `Your potato with the id ${readyPotato} is ready!`,
   })
   @Role(['Any'])
   readyPotato(@Args('potatoId') potatoId: number) {
