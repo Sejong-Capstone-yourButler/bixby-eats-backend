@@ -128,6 +128,7 @@ export class OrderService {
           orders = orders.filter((order) => order.status === status);
         }
       }
+      console.log(orders);
       return {
         ok: true,
         orders,

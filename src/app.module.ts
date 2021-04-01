@@ -22,6 +22,7 @@ import { Dish } from './restaurants/entities/dish.entity';
 import { OrdersModule } from './orders/orders.module';
 import { Order } from './orders/entities/order.entity';
 import { OrderItem } from './orders/entities/order-item.entity';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -72,11 +73,19 @@ import { OrderItem } from './orders/entities/order-item.entity';
     }),
     // GraphQLModule처럼 설정이 있으면 Dynamic Module이다.
     GraphQLModule.forRoot({
+      installSubscriptionHandlers: true,
       autoSchemaFile: true,
+
       // Grapql context에 { user : req['user'] }
-      context: ({ req }) => {
+      // http는 req를 가지고 web socket은 connection을 가진다.
+      // http는 매번 request마다 토큰을 보내지만
+      // WS는 딱 한 번만 연결할 때 token을 보낸다.
+      context: ({ req, connection }) => {
         console.log('GraphQl context');
-        return { user: req['user'] };
+        const TOKEN_KEY = 'x-jwt';
+        return {
+          token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY],
+        };
       },
     }),
     JwtModule.forRoot({
@@ -93,6 +102,7 @@ import { OrderItem } from './orders/entities/order-item.entity';
     UsersModule,
     RestaurantsModule,
     OrdersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
@@ -100,12 +110,14 @@ import { OrderItem } from './orders/entities/order-item.entity';
 
 // Class를 이용해서 Middleware를 설정하는 방법
 // function middleware를 사용하고 싶다면 main.ts에서 app.use()를 사용한다.
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    console.log('Before consumer');
-    consumer
-      .apply(JwtMiddleware)
-      .forRoutes({ path: '/graphql', method: RequestMethod.ALL });
-    console.log('After consumer');
-  }
-}
+export class AppModule {}
+
+// export class AppModule implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     console.log('Before consumer');
+//     consumer
+//       .apply(JwtMiddleware)
+//       .forRoutes({ path: '/graphql', method: RequestMethod.ALL });
+//     console.log('After consumer');
+//   }
+// }

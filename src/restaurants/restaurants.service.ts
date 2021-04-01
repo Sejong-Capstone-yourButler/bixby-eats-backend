@@ -205,6 +205,7 @@ export class RestaurantService {
       const [restaurants, totalResults] = await this.restaurants.findAndCount({
         skip: (page - 1) * 25,
         take: 25,
+        relations: ['menu'],
       });
       return {
         ok: true,
@@ -225,7 +226,7 @@ export class RestaurantService {
   }: RestaurantInput): Promise<RestaurantOutput> {
     try {
       const restaurant = await this.restaurants.findOne(restaurantId, {
-        relations: ['menu'],
+        relations: ['menu', 'owner'],
       });
       if (!restaurant) {
         return {
@@ -273,6 +274,7 @@ export class RestaurantService {
     createDishInput: CreateDishInput,
   ): Promise<CreateDishOutput> {
     try {
+      console.log('restaurant');
       const restaurant = await this.restaurants.findOne(
         createDishInput.restaurantId,
       );
