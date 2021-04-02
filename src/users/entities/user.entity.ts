@@ -53,8 +53,9 @@ export class User extends CoreEntity {
   @OneToMany((type) => Order, (order) => order.customer)
   orders: Order[];
 
+  // { eager : true }를 추가하면 pagination이 불가능하다.
   @Field((type) => [Payment])
-  @OneToMany((type) => Payment, (payment) => payment.user)
+  @OneToMany((type) => Payment, (payment) => payment.user, { eager: true })
   payments: Payment[];
 
   @Field((type) => [Order])
