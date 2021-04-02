@@ -58,25 +58,26 @@ export class OrderService {
           };
         }
         let dishFinalPrice = dish.price;
-        for (const itemOption of item.options) {
-          const dishOption = dish.options.find(
-            (dishOption) => dishOption.name === itemOption.name,
-          );
-          if (dishOption) {
-            if (dishOption.extra) {
-              dishFinalPrice = dishFinalPrice + dishOption.extra;
-            } else {
-              const dishOptionChoice = dishOption.choices.find(
-                (optionChoice) => optionChoice.name === itemOption.choice,
-              );
-              if (dishOptionChoice) {
-                if (dishOptionChoice.extra) {
-                  dishFinalPrice = dishFinalPrice + dishOptionChoice.extra;
+        if (item.options)
+          for (const itemOption of item.options) {
+            const dishOption = dish.options.find(
+              (dishOption) => dishOption.name === itemOption.name,
+            );
+            if (dishOption) {
+              if (dishOption.extra) {
+                dishFinalPrice = dishFinalPrice + dishOption.extra;
+              } else {
+                const dishOptionChoice = dishOption.choices.find(
+                  (optionChoice) => optionChoice.name === itemOption.choice,
+                );
+                if (dishOptionChoice) {
+                  if (dishOptionChoice.extra) {
+                    dishFinalPrice = dishFinalPrice + dishOptionChoice.extra;
+                  }
                 }
               }
             }
           }
-        }
         orderFinalPrice = orderFinalPrice + dishFinalPrice;
         const orderItem = await this.orderItems.save(
           this.orderItems.create({
@@ -100,7 +101,8 @@ export class OrderService {
       return {
         ok: true,
       };
-    } catch {
+    } catch (e) {
+      console.log(e);
       return {
         ok: false,
         error: 'Could not create order.',
@@ -140,7 +142,6 @@ export class OrderService {
           orders = orders.filter((order) => order.status === status);
         }
       }
-      console.log(orders);
       return {
         ok: true,
         orders,
