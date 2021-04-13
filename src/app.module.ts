@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { JwtModule } from './jwt/jwt.module';
-import { JwtMiddleware } from './jwt/jwt.middleware';
 import { Verification } from './users/entities/verification.entity';
 import { MailModule } from './mail/mail.module';
 import { Restaurant } from './restaurants/entities/restaurant.entity';
@@ -123,13 +122,12 @@ import { UploadsModule } from './uploads/uploads.module';
 // Class를 이용해서 Middleware를 설정하는 방법
 // function middleware를 사용하고 싶다면 main.ts에서 app.use()를 사용한다.
 export class AppModule {}
-
 // export class AppModule implements NestModule {
 //   configure(consumer: MiddlewareConsumer) {
 //     console.log('Before consumer');
 //     consumer
 //       .apply(JwtMiddleware)
-//       .forRoutes({ path: '/graphql', method: RequestMethod.ALL });
+//       .forRoutes({ path: '*', method: RequestMethod.ALL });
 //     console.log('After consumer');
 //   }
 // }
