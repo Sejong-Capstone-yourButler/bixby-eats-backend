@@ -28,8 +28,4 @@ export class Stock extends CoreEntity {
   @IsString()
   @Length(1, 140)
   description: string;
-
-  @Field((type) => [Dish])
-  @OneToMany((type) => Dish, (dish) => dish.stock)
-  dish: Dish[];
 }

@@ -2,7 +2,14 @@ import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { IsNumber, IsString, Length } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Stock } from 'src/stock/entities/stock.entity';
-import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  RelationId,
+} from 'typeorm';
 import { Restaurant } from './restaurant.entity';
 
 @InputType('DishChoiceInputType', { isAbstract: true })
@@ -62,12 +69,16 @@ export class Dish extends CoreEntity {
   @Column({ type: 'json', nullable: true })
   options?: DishOption[];
 
-  @Field((type) => Stock)
-  @ManyToOne((type) => Stock, (stock) => stock.dish, {
-    onDelete: 'CASCADE',
-  })
-  stock: Stock;
+  @Field((type) => [Stock])
+  @ManyToMany((type) => Stock, { eager: true })
+  @JoinTable()
+  ingredients: Stock[];
 
-  @RelationId((dish: Dish) => dish.stock)
-  stockId: number;
+  // @Field((type) => [OrderItem])
+  // @ManyToMany((type) => OrderItem, { eager: true })
+  // @JoinTable()
+  // items: OrderItem[];
+
+  // @RelationId((dish: Dish) => dish.ingredients)
+  // stockId: number;
 }

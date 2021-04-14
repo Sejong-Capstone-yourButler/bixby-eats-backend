@@ -49,15 +49,16 @@ export class RestaurantService {
     createRestaurantInput: CreateRestaurantInput,
   ): Promise<CreateRestaurantOutput> {
     try {
+      console.log('hi');
       // 단순히 create만 하면 TS에만 존재하고 DB에는 저장되지 않으니 .save()를 사용해야 한다.
       const newRestaurant = this.restaurants.create(createRestaurantInput);
       newRestaurant.owner = owner;
-
+      console.log(newRestaurant);
       const category = await this.categories.getOrCreate(
         createRestaurantInput.categoryName,
       );
       newRestaurant.category = category;
-
+      console.log(category);
       await this.restaurants.save(newRestaurant);
       return {
         ok: true,
@@ -384,7 +385,16 @@ export class RestaurantService {
 
   async myRestaurants(owner: User): Promise<MyRestaurantsOutput> {
     try {
-      const restaurants = await this.restaurants.find({ owner });
+      const restaurants = await this.restaurants.find({
+        where: {
+          owner,
+        },
+        order: {
+          createdAt: 'DESC',
+        },
+        // take: 25,
+        // skip: (page - 1) * 25,
+      });
       return {
         restaurants,
         ok: true,

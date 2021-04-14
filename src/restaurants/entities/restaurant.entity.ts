@@ -14,7 +14,7 @@ export class Restaurant extends CoreEntity {
   @Field((type) => String) // GraphQL은 Field
   @Column() // TypeORM은 Column을 사용한다. (DB)
   @IsString()
-  @Length(5)
+  @Length(1)
   name: string;
 
   @Field((type) => String)
