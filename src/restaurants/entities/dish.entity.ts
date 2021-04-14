@@ -1,7 +1,14 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { IsNumber, IsString, Length } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  RelationId,
+} from 'typeorm';
 import { Ingredient } from './ingredient.entity';
 import { Restaurant } from './restaurant.entity';
 
@@ -62,7 +69,12 @@ export class Dish extends CoreEntity {
   @Column({ type: 'json', nullable: true })
   options?: DishOption[];
 
-  @Field((type) => [Ingredient], { nullable: true })
-  @Column({ type: 'json', nullable: true })
+  // @Field((type) => [Ingredient], { nullable: true })
+  // @Column({ type: 'json', nullable: true })
+  // ingredients: Ingredient[];
+
+  @Field((type) => [Ingredient])
+  @ManyToMany((type) => Ingredient, { eager: true })
+  @JoinTable()
   ingredients: Ingredient[];
 }

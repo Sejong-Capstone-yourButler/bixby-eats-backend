@@ -9,6 +9,7 @@ import {
 } from 'src/common/common.constants';
 import { Dish } from 'src/restaurants/entities/dish.entity';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
+import { Stock } from 'src/stock/entities/stock.entity';
 import { User, UserRole } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
@@ -30,6 +31,9 @@ export class OrderService {
 
     @InjectRepository(Restaurant)
     private readonly restaurants: Repository<Restaurant>,
+
+    @InjectRepository(Stock)
+    private readonly stocks: Repository<Stock>,
 
     @InjectRepository(Dish)
     private readonly dishes: Repository<Dish>,
@@ -79,6 +83,7 @@ export class OrderService {
             }
           }
         orderFinalPrice = orderFinalPrice + dishFinalPrice;
+
         const orderItem = await this.orderItems.save(
           this.orderItems.create({
             dish,
@@ -203,6 +208,7 @@ export class OrderService {
     }
   }
 
+  // todo
   async editOrder(
     user: User,
     { id: orderId, status }: EditOrderInput,
@@ -251,7 +257,18 @@ export class OrderService {
       });
       const newOrder = { ...order, status };
       if (user.role === UserRole.Owner) {
-        if (status === OrderStatus.Cooked) {
+        if (status === OrderStatus.Cooking) {
+          for (const item of order.items) {
+            for (const ingredient of item.dish.ingredients) {
+              let stockCount = ingredient.stock.count;
+              stockCount = stockCount - ingredient.count;
+              await this.stocks.save({
+                ...ingredient.stock,
+                count: stockCount,
+              });
+            }
+          }
+        } else if (status === OrderStatus.Cooked) {
           await this.pubSub.publish(NEW_COOKED_ORDER, {
             cookedOrders: newOrder,
           });
