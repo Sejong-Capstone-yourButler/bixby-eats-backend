@@ -1,8 +1,9 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Query, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthUser } from 'src/auth/auth-user.decorator';
 import { Role } from 'src/auth/role.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { EditStockInput, EditStockOutput } from './dtos/edit-stock.dto';
+import { GetStocksInput, GetStocksOutput } from './dtos/get-stocks.dto';
 import {
   RegisterStockInput,
   RegisterStockOutput,
@@ -17,18 +18,28 @@ export class StockResolver {
   @Mutation((returns) => RegisterStockOutput)
   @Role(['Owner'])
   async registerStock(
-    @AuthUser() authUser: User,
+    @AuthUser() owner: User,
     @Args('input') registerStockInput: RegisterStockInput,
   ): Promise<RegisterStockOutput> {
-    return this.stockService.registerStock(authUser, registerStockInput);
+    return this.stockService.registerStock(owner, registerStockInput);
   }
 
   @Mutation((returns) => EditStockOutput)
   @Role(['Owner'])
   async editStock(
-    @AuthUser() authUser: User,
+    @AuthUser() owner: User,
     @Args('input') registerStockInput: EditStockInput,
   ): Promise<EditStockOutput> {
-    return this.stockService.editStock(authUser, registerStockInput);
+    return this.stockService.editStock(owner, registerStockInput);
+  }
+
+  @Query((returns) => GetStocksOutput)
+  @Role(['Owner'])
+  async getStocks(
+    @AuthUser() owner: User,
+    @Args('input') getStocksInput: GetStocksInput,
+  ): Promise<GetStocksOutput> {
+    console.log(typeof getStocksInput);
+    return this.stockService.getStocks(owner, getStocksInput);
   }
 }
