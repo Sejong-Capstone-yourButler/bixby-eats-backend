@@ -53,9 +53,9 @@ export class Restaurant extends CoreEntity {
   @OneToMany((type) => Dish, (dish) => dish.restaurant)
   menu: Dish[];
 
-  @Field((type) => Stock)
+  @Field((type) => [Stock])
   @OneToMany((type) => Stock, (stock) => stock.restaurant)
-  stock: Stock;
+  stock: Stock[];
 
   @Field((type) => Boolean)
   @Column({ default: false })
