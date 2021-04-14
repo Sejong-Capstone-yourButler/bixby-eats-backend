@@ -1,6 +1,7 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { IsNumber, IsString, Length } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
+import { Stock } from 'src/stock/entities/stock.entity';
 import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
 import { Restaurant } from './restaurant.entity';
 
@@ -60,4 +61,13 @@ export class Dish extends CoreEntity {
   @Field((type) => [DishOption], { nullable: true })
   @Column({ type: 'json', nullable: true })
   options?: DishOption[];
+
+  @Field((type) => Stock)
+  @ManyToOne((type) => Stock, (stock) => stock.dish, {
+    onDelete: 'CASCADE',
+  })
+  stock: Stock;
+
+  @RelationId((dish: Dish) => dish.stock)
+  stockId: number;
 }

@@ -21,6 +21,8 @@ import { PaymentsModule } from './payments/payments.module';
 import { Payment } from './payments/entities/payment.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { UploadsModule } from './uploads/uploads.module';
+import { StockModule } from './stock/stock.module';
+import { Stock } from './stock/entities/stock.entity';
 
 @Module({
   imports: [
@@ -73,6 +75,7 @@ import { UploadsModule } from './uploads/uploads.module';
         Order,
         OrderItem,
         Payment,
+        Stock,
       ],
     }),
     // GraphQLModule처럼 설정이 있으면 Dynamic Module이다.
@@ -110,6 +113,7 @@ import { UploadsModule } from './uploads/uploads.module';
     OrdersModule,
     CommonModule,
     PaymentsModule,
+    StockModule,
     UploadsModule.forRoot({
       accessKeyId: process.env.AWS_ACCESS_KEY,
       secretAccessKey: process.env.AWS_SECRET_KEY,
