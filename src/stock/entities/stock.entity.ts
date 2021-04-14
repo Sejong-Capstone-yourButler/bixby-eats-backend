@@ -2,7 +2,8 @@ import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { IsNumber, IsString, Length } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Ingredient } from 'src/restaurants/entities/ingredient.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
+import { Column, Entity, ManyToOne, OneToMany, RelationId } from 'typeorm';
 
 @InputType('StockInputType', { isAbstract: true })
 @ObjectType()
@@ -28,6 +29,15 @@ export class Stock extends CoreEntity {
   @IsString()
   @Length(1, 140)
   description?: string;
+
+  @Field((type) => Restaurant)
+  @ManyToOne((type) => Restaurant, (restaurant) => restaurant.stock, {
+    onDelete: 'CASCADE',
+  })
+  restaurant: Restaurant;
+
+  @RelationId((stock: Stock) => stock.restaurant)
+  restaurantId: number;
 
   @Field((type) => [Ingredient])
   @OneToMany((type) => Ingredient, (ingredient) => ingredient.stock)

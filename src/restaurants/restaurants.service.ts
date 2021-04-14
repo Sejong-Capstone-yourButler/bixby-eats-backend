@@ -57,16 +57,13 @@ export class RestaurantService {
     createRestaurantInput: CreateRestaurantInput,
   ): Promise<CreateRestaurantOutput> {
     try {
-      console.log('hi');
       // 단순히 create만 하면 TS에만 존재하고 DB에는 저장되지 않으니 .save()를 사용해야 한다.
       const newRestaurant = this.restaurants.create(createRestaurantInput);
       newRestaurant.owner = owner;
-      console.log(newRestaurant);
       const category = await this.categories.getOrCreate(
         createRestaurantInput.categoryName,
       );
       newRestaurant.category = category;
-      console.log(category);
       await this.restaurants.save(newRestaurant);
       return {
         ok: true,
@@ -310,7 +307,6 @@ export class RestaurantService {
           error: "You can't do that.",
         };
       }
-      console.log(restaurant.menu);
       if (restaurant.menu.find((dish) => dish.name === createDishInput.name)) {
         return {
           ok: false,
@@ -326,14 +322,11 @@ export class RestaurantService {
           stockItem = await this.stocks.save(
             this.stocks.create({
               name: ingredient.name,
-              // count: ingredient.ingredientCount,
+              restaurant,
             }),
           );
         }
-        // const ingredientObj = {
-        //   stock: stockItem,
-        //   count: ingredient.ingredientCount,
-        // };
+
         const ingredientObj = await this.ingredients.save(
           this.ingredients.create({
             stock: stockItem,
@@ -390,7 +383,7 @@ export class RestaurantService {
     } catch {
       return {
         ok: false,
-        error: 'Could not delete dish',
+        error: 'Could not edit dish',
       };
     }
   }

@@ -2,6 +2,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthUser } from 'src/auth/auth-user.decorator';
 import { Role } from 'src/auth/role.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { EditStockInput, EditStockOutput } from './dtos/edit-stock.dto';
 import {
   RegisterStockInput,
   RegisterStockOutput,
@@ -20,5 +21,14 @@ export class StockResolver {
     @Args('input') registerStockInput: RegisterStockInput,
   ): Promise<RegisterStockOutput> {
     return this.stockService.registerStock(authUser, registerStockInput);
+  }
+
+  @Mutation((returns) => EditStockOutput)
+  @Role(['Owner'])
+  async editStock(
+    @AuthUser() authUser: User,
+    @Args('input') registerStockInput: EditStockInput,
+  ): Promise<EditStockOutput> {
+    return this.stockService.editStock(authUser, registerStockInput);
   }
 }
