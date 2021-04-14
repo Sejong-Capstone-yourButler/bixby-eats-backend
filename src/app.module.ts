@@ -23,6 +23,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { UploadsModule } from './uploads/uploads.module';
 import { StockModule } from './stock/stock.module';
 import { Stock } from './stock/entities/stock.entity';
+import { Ingredient } from './restaurants/entities/ingredient.entity';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { Stock } from './stock/entities/stock.entity';
         OrderItem,
         Payment,
         Stock,
+        Ingredient,
       ],
     }),
     // GraphQLModule처럼 설정이 있으면 Dynamic Module이다.

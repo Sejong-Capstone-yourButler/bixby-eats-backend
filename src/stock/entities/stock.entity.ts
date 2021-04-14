@@ -1,8 +1,8 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { IsNumber, IsString, Length } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
+import { Ingredient } from 'src/restaurants/entities/ingredient.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { Dish } from 'src/restaurants/entities/dish.entity';
 
 @InputType('StockInputType', { isAbstract: true })
 @ObjectType()
@@ -13,19 +13,23 @@ export class Stock extends CoreEntity {
   @IsString()
   name: string;
 
-  @Field((type) => Int)
-  @Column()
-  @IsNumber()
-  price: number;
-
-  @Field((type) => Int)
-  @Column()
+  @Field((type) => Int, { defaultValue: 0 })
+  @Column({ default: 0 })
   @IsNumber()
   count: number;
 
-  @Field((type) => String)
-  @Column()
+  @Field((type) => Int, { nullable: true })
+  @Column({ nullable: true })
+  @IsNumber()
+  price?: number;
+
+  @Field((type) => String, { nullable: true })
+  @Column({ nullable: true })
   @IsString()
   @Length(1, 140)
-  description: string;
+  description?: string;
+
+  @Field((type) => [Ingredient])
+  @OneToMany((type) => Ingredient, (ingredient) => ingredient.stock)
+  ingredients: Ingredient[];
 }

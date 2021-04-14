@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Stock } from 'src/stock/entities/stock.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Like, Raw, Repository } from 'typeorm';
 import { AllCategoriesOutput } from './dtos/all-categories.dto';
@@ -29,6 +30,7 @@ import {
 } from './dtos/search-restaurant.dto';
 import { Category } from './entities/category.entity';
 import { Dish } from './entities/dish.entity';
+import { Ingredient } from './entities/ingredient.entity';
 import { Restaurant } from './entities/restaurant.entity';
 import { CategoryRepository } from './repositories/category.repository';
 
@@ -40,6 +42,12 @@ export class RestaurantService {
 
     @InjectRepository(Dish)
     private readonly dishes: Repository<Dish>,
+
+    @InjectRepository(Stock)
+    private readonly stocks: Repository<Stock>,
+
+    @InjectRepository(Ingredient)
+    private readonly ingredients: Repository<Ingredient>,
 
     private readonly categories: CategoryRepository,
   ) {}
@@ -283,10 +291,13 @@ export class RestaurantService {
     createDishInput: CreateDishInput,
   ): Promise<CreateDishOutput> {
     try {
-      console.log('restaurant');
       const restaurant = await this.restaurants.findOne(
         createDishInput.restaurantId,
+        {
+          relations: ['menu'],
+        },
       );
+
       if (!restaurant) {
         return {
           ok: false,
@@ -299,8 +310,41 @@ export class RestaurantService {
           error: "You can't do that.",
         };
       }
+      console.log(restaurant.menu);
+      if (restaurant.menu.find((dish) => dish.name === createDishInput.name)) {
+        return {
+          ok: false,
+          error: 'The dish already exists',
+        };
+      }
+      const ingredients: Ingredient[] = [];
+      for (const ingredient of createDishInput.ingredients) {
+        let stockItem = await this.stocks.findOne({
+          name: ingredient.name,
+        });
+        if (!stockItem) {
+          stockItem = await this.stocks.save(
+            this.stocks.create({
+              name: ingredient.name,
+              // count: ingredient.ingredientCount,
+            }),
+          );
+        }
+        // const ingredientObj = {
+        //   stock: stockItem,
+        //   count: ingredient.ingredientCount,
+        // };
+        const ingredientObj = await this.ingredients.save(
+          this.ingredients.create({
+            stock: stockItem,
+            count: ingredient.ingredientCount,
+          }),
+        );
+        ingredients.push(ingredientObj);
+      }
+
       await this.dishes.save(
-        this.dishes.create({ ...createDishInput, restaurant }),
+        this.dishes.create({ ...createDishInput, ingredients, restaurant }),
       );
       return {
         ok: true,
