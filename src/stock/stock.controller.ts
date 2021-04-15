@@ -11,7 +11,7 @@ export class StockController {
 
   @Get()
   @Role(['Owner'])
-  async getOrders(
+  async getStocks(
     @AuthUser() owner: User,
     @Param('restaurantId') id,
   ): Promise<GetStocksOutput> {
