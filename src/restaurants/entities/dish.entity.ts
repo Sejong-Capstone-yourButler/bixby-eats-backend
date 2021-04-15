@@ -69,10 +69,6 @@ export class Dish extends CoreEntity {
   @Column({ type: 'json', nullable: true })
   options?: DishOption[];
 
-  // @Field((type) => [Ingredient], { nullable: true })
-  // @Column({ type: 'json', nullable: true })
-  // ingredients: Ingredient[];
-
   @Field((type) => [Ingredient])
   @ManyToMany((type) => Ingredient, { eager: true })
   @JoinTable()

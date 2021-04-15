@@ -39,7 +39,6 @@ export class StockResolver {
     @AuthUser() owner: User,
     @Args('input') getStocksInput: GetStocksInput,
   ): Promise<GetStocksOutput> {
-    console.log(typeof getStocksInput);
     return this.stockService.getStocks(owner, getStocksInput);
   }
 }

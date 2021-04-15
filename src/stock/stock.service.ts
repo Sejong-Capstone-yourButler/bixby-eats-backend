@@ -93,6 +93,9 @@ export class StockService {
         where: {
           restaurant,
         },
+        order: {
+          createdAt: 'ASC',
+        },
       });
       return {
         stocks,
