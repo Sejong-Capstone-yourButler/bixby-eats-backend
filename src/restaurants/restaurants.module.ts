@@ -5,6 +5,7 @@ import { Dish } from './entities/dish.entity';
 import { Ingredient } from './entities/ingredient.entity';
 import { Restaurant } from './entities/restaurant.entity';
 import { CategoryRepository } from './repositories/category.repository';
+import { RestaurantsController } from './restaurants.controller';
 import {
   CategoryResolver,
   DishResolver,
@@ -22,6 +23,7 @@ import { RestaurantService } from './restaurants.service';
       CategoryRepository,
     ]),
   ],
+  controllers: [RestaurantsController],
   providers: [
     RestaurantResolver,
     CategoryResolver,
