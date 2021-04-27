@@ -2,7 +2,14 @@ import { Field, Float, InputType, ObjectType } from '@nestjs/graphql';
 import { IsNumber, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
-import { Column, Entity, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  RelationId,
+} from 'typeorm';
 import { OrderItem } from './order-item.entity';
 
 export enum OrderStatus {
@@ -22,12 +29,12 @@ export class Income extends CoreEntity {
   @IsString()
   createdAtString: string;
 
-  @Field((type) => Restaurant, { nullable: true })
-  @OneToOne((type) => Restaurant)
-  restaurant: Restaurant;
-
   @Column({ nullable: true })
   @Field((type) => Float, { nullable: true })
   @IsNumber()
   income?: number;
+
+  @Field((type) => Restaurant, { nullable: true })
+  @ManyToOne((type) => Restaurant, (restaurant) => restaurant.incomes)
+  restaurant: Restaurant;
 }

@@ -14,6 +14,7 @@ import { User, UserRole } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
 import { EditOrderInput, EditOrderOutput } from './dtos/edit-order.dto';
+import { GetIncomesInput, GetIncomesOutput } from './dtos/get-incomes.dto';
 import { GetOrderInput, GetOrderOutput } from './dtos/get-order.dto';
 import { GetOrdersInput, GetOrdersOutput } from './dtos/get-orders.dto';
 import { TakeOrderInput, TakeOrderOutput } from './dtos/take-order.dto';
@@ -340,6 +341,24 @@ export class OrderService {
       return {
         ok: false,
         error: 'Could not upate order.',
+      };
+    }
+  }
+
+  async getIncomes({
+    restaurantId,
+  }: GetIncomesInput): Promise<GetIncomesOutput> {
+    try {
+      const restaurant = await this.restaurants.findOne({ id: restaurantId });
+      const incomes = await this.incomes.find({ restaurant });
+      return {
+        ok: true,
+        incomes,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: "Can't find incomes",
       };
     }
   }

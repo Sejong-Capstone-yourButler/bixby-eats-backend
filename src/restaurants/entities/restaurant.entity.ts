@@ -8,6 +8,7 @@ import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -65,9 +66,9 @@ export class Restaurant extends CoreEntity {
   @OneToMany((type) => Stock, (stock) => stock.restaurant)
   stock: Stock[];
 
-  @Field((type) => Income)
-  @OneToOne((type) => Income)
-  income: Income;
+  @Field((type) => [Income])
+  @OneToMany((type) => Income, (income) => income.restaurant)
+  incomes: Income[];
 
   @Field((type) => Boolean)
   @Column({ default: false })

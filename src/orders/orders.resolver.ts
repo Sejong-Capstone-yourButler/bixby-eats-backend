@@ -12,6 +12,7 @@ import {
 import { User } from 'src/users/entities/user.entity';
 import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
 import { EditOrderInput, EditOrderOutput } from './dtos/edit-order.dto';
+import { GetIncomesInput, GetIncomesOutput } from './dtos/get-incomes.dto';
 import { GetOrderInput, GetOrderOutput } from './dtos/get-order.dto';
 import { GetOrdersInput, GetOrdersOutput } from './dtos/get-orders.dto';
 import { OrderUpdatesInput } from './dtos/order-update.dto';
@@ -54,6 +55,14 @@ export class OrderResolver {
     @Args('input') getOrderInput: GetOrderInput,
   ): Promise<GetOrderOutput> {
     return this.ordersService.getOrder(user, getOrderInput);
+  }
+
+  @Query((returns) => GetIncomesOutput)
+  @Role(['Owner'])
+  async getIncomes(
+    @Args('input') getIncomesInput: GetIncomesInput,
+  ): Promise<GetIncomesOutput> {
+    return this.ordersService.getIncomes(getIncomesInput);
   }
 
   @Mutation((returns) => EditOrderOutput)
