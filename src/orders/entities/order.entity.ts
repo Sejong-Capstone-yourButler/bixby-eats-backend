@@ -5,7 +5,7 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { IsEnum, IsNumber } from 'class-validator';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -33,6 +33,11 @@ registerEnumType(OrderStatus, { name: 'OrderStatus' });
 @ObjectType()
 @Entity()
 export class Order extends CoreEntity {
+  @Field((type) => String)
+  @Column()
+  @IsString()
+  createdAtString: string;
+
   @Field((type) => User, { nullable: true })
   @ManyToOne((type) => User, (user) => user.orders, {
     onDelete: 'SET NULL',

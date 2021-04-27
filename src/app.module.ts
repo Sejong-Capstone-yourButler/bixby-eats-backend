@@ -24,6 +24,7 @@ import { UploadsModule } from './uploads/uploads.module';
 import { StockModule } from './stock/stock.module';
 import { Stock } from './stock/entities/stock.entity';
 import { Ingredient } from './restaurants/entities/ingredient.entity';
+import { Income } from './orders/entities/income.entity';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { Ingredient } from './restaurants/entities/ingredient.entity';
         Payment,
         Stock,
         Ingredient,
+        Income,
       ],
     }),
     // GraphQLModule처럼 설정이 있으면 Dynamic Module이다.

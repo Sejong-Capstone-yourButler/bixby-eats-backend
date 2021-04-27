@@ -356,14 +356,12 @@ export class RestaurantService {
     owner,
     { restaurantId }: GetDishsInput,
   ): Promise<GetDishsOutput> {
-    console.log(restaurantId);
     try {
       const restaurant = await this.restaurants.findOne({
         owner,
         id: restaurantId,
       });
       const dishes = await this.dishes.find({ restaurant });
-      console.log(dishes);
       return {
         ok: true,
         dishes,
