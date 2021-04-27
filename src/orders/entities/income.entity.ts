@@ -2,15 +2,7 @@ import { Field, Float, InputType, ObjectType } from '@nestjs/graphql';
 import { IsNumber, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
-  RelationId,
-} from 'typeorm';
-import { OrderItem } from './order-item.entity';
+import { Column, Entity, ManyToOne } from 'typeorm';
 
 export enum OrderStatus {
   Pending = 'Pending',
