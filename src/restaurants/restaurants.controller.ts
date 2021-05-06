@@ -11,7 +11,7 @@ export class RestaurantsController {
 
   @Get()
   @Role(['Owner'])
-  async getDishs(
+  async getDishes(
     @AuthUser() owner: User,
     @Param('restaurantId') restaurantId,
   ): Promise<GetDishsOutput> {
