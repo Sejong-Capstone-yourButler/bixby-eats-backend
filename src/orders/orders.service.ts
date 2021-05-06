@@ -125,7 +125,7 @@ export class OrderService {
 
   async getOrders(
     user: User,
-    { status }: GetOrdersInput,
+    { status, restaurantId }: GetOrdersInput,
   ): Promise<GetOrdersOutput> {
     try {
       let orders: Order[];
@@ -144,13 +144,14 @@ export class OrderService {
           },
         });
       } else if (user.role === UserRole.Owner) {
-        const restaurants = await this.restaurants.find({
+        const restaurant = await this.restaurants.findOne({
           where: {
             owner: user,
+            id: restaurantId,
           },
           relations: ['orders'], // relations을 추가함으로써 OneToMany같은 관계형 field를 불러올 수 있다.
         });
-        orders = restaurants.map((restaurant) => restaurant.orders).flat(1);
+        orders = restaurant.orders;
         if (status) {
           orders = orders.filter((order) => order.status === status);
         }
