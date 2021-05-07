@@ -97,10 +97,17 @@ export class OrderService {
         );
         orderItems.push(orderItem);
       }
-      const day = new Date();
+      let day = new Date();
+      const addHours = (day, hour) => {
+        return new Date(day.setTime(day.getTime() + hour * 60 * 60 * 1000));
+      };
+      console.log('createOrder day : ');
+      console.log(day);
+      day = addHours(day, 9);
+      console.log(day);
       const order = await this.orders.save(
         this.orders.create({
-          createdAtString: day.toLocaleDateString(),
+          createdAtString: day.toLocaleDateString(), // + 9:13
           customer,
           restaurant,
           total: orderFinalPrice,
@@ -264,7 +271,9 @@ export class OrderService {
       });
       const newOrder = { ...order, status };
       if (user.role === UserRole.Owner) {
+        console.log('user.role === UserRole.Owner');
         if (status === OrderStatus.Cooking) {
+          console.log('status === OrderStatus.Cooking');
           for (const item of order.items) {
             for (const ingredient of item.dish.ingredients) {
               let stockCount = ingredient.stock.count;
@@ -276,21 +285,30 @@ export class OrderService {
             }
           }
           try {
+            console.log(`income updated 1`);
             const income = await this.incomes.findOne({
               createdAtString: order.createdAtString,
             });
+            console.log(`income updated income`);
+            console.log(income);
             await this.incomes.save({
               ...income,
               income: income.income + order.total,
             });
+            console.log(`income updated 3`);
           } catch {
-            await this.incomes.save(
+            console.log(`income updated 4`);
+            console.log(`order.createdAtString : ${order.createdAtString}`);
+            console.log(`order.total : ${order.total}`);
+            console.log(`order.restaurant : ${order.restaurant}`);
+            const income = await this.incomes.save(
               this.incomes.create({
-                restaurant: order.restaurant,
                 createdAtString: order.createdAtString,
                 income: order.total,
+                restaurant: order.restaurant,
               }),
             );
+            console.log(`income created ${income}`);
           }
         } else if (status === OrderStatus.Cooked) {
           await this.pubSub.publish(NEW_COOKED_ORDER, {
