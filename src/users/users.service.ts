@@ -108,12 +108,6 @@ export class UserService {
       const user = await this.users.findOne(userId);
       if (email) {
         user.email = email;
-        user.verified = false;
-        await this.verifications.delete({ user: { id: user.id } });
-        const verification = await this.verifications.save(
-          this.verifications.create({ user }),
-        );
-        this.mailService.sendVerificationEmail(user.email, verification.code);
       }
       if (password) {
         user.password = password;
