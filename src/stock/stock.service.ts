@@ -49,14 +49,12 @@ export class StockService {
       const stock = await this.stocks.findOne(editStockInput.stockId, {
         relations: ['restaurant'],
       });
-
       if (!stock) {
         return {
           ok: false,
           error: 'Stock not found',
         };
       }
-
       if (stock?.restaurant.ownerId !== owner.id) {
         return {
           ok: false,
