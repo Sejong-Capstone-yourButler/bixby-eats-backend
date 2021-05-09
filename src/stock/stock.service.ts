@@ -61,7 +61,7 @@ export class StockService {
           error: "You can't do that.",
         };
       }
-      await this.stocks.save([
+      const [updatedStock, _] = await this.stocks.save([
         {
           id: editStockInput.stockId,
           ...editStockInput,
@@ -69,6 +69,7 @@ export class StockService {
       ]);
       return {
         ok: true,
+        stock: updatedStock,
       };
     } catch {
       return {
