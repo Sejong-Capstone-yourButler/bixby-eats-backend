@@ -220,6 +220,7 @@ export class RestaurantService {
         take: 3,
         order: {
           isPromoted: 'DESC',
+          createdAt: 'DESC',
         },
       });
       return {
