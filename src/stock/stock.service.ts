@@ -49,24 +49,30 @@ export class StockService {
       const stock = await this.stocks.findOne(editStockInput.stockId, {
         relations: ['restaurant'],
       });
+      console.log('Stock:');
+      console.log(stock);
       if (!stock) {
         return {
           ok: false,
           error: 'Stock not found',
         };
       }
+      console.log(owner);
       if (stock?.restaurant.ownerId !== owner.id) {
         return {
           ok: false,
           error: "You can't do that.",
         };
       }
+      console.log('owner passed');
       const [updatedStock, _] = await this.stocks.save([
         {
           id: editStockInput.stockId,
           ...editStockInput,
         },
       ]);
+      console.log('Stock:');
+      console.log(updatedStock);
       return {
         ok: true,
         stock: updatedStock,

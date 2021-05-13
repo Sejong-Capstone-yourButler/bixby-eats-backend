@@ -33,7 +33,6 @@ export class StockController {
       ...body,
       stockId: +stockId,
     };
-    console.log(editStockInput);
     return this.stockService.editStock(owner, editStockInput);
   }
 }
