@@ -20,6 +20,7 @@ import {
   EditRestaurantInput,
   EditRestaurantOutput,
 } from './dtos/edit-restaurant.dto';
+import { GetDishInput, GetDishOutput } from './dtos/get-dish.dto';
 import { GetDishsInput, GetDishsOutput } from './dtos/get-dishs.dto';
 import { MyRestaurantInput, MyRestaurantOutput } from './dtos/my-restaurant';
 import { MyRestaurantsOutput } from './dtos/my-restaurants.dto';
@@ -371,6 +372,40 @@ export class RestaurantService {
       return {
         ok: false,
         error: "Can't not find dishes",
+      };
+    }
+  }
+
+  async getDish(owner: User, { dishId }: GetDishInput): Promise<GetDishOutput> {
+    try {
+      const dish = await this.dishes.findOne(
+        {
+          id: dishId,
+        },
+        {
+          relations: ['restaurant'],
+        },
+      );
+      if (!dish) {
+        return {
+          ok: false,
+          error: 'Dish not found',
+        };
+      }
+      if (dish.restaurant.ownerId !== owner.id) {
+        return {
+          ok: false,
+          error: "You can't do that.",
+        };
+      }
+      return {
+        ok: true,
+        dish,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: 'Could not find dish',
       };
     }
   }
