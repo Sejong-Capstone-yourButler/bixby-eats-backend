@@ -431,24 +431,43 @@ export class RestaurantService {
         };
       }
 
+      const restaurant = await this.restaurants.findOne(
+        editDishInput.restaurantId,
+        {
+          relations: ['menu'],
+        },
+      );
+
+      const ingredients: Ingredient[] = [];
+      for (const ingredient of editDishInput.ingredients) {
+        let stockItem = await this.stocks.findOne({
+          name: ingredient.stock.name,
+        });
+        if (!stockItem) {
+          stockItem = await this.stocks.save(
+            this.stocks.create({
+              name: ingredient.stock.name,
+              restaurant,
+            }),
+          );
+        }
+
+        const ingredientObj = await this.ingredients.save(
+          this.ingredients.create({
+            stock: stockItem,
+            count: ingredient.count,
+          }),
+        );
+        ingredients.push(ingredientObj);
+      }
+
       await this.dishes.save([
         {
           id: editDishInput.dishId,
-          name: editDishInput.name,
-          description: editDishInput.description,
-          options: editDishInput.options,
+          ...editDishInput,
+          ingredients,
         },
       ]);
-
-      await editDishInput.ingredients.forEach(async (ingredient) => {
-        await this.ingredients.update(ingredient.ingredientId, {
-          count: ingredient.count,
-        });
-
-        await this.stocks.update(ingredient.stock.stockId, {
-          name: ingredient.stock.name,
-        });
-      });
 
       return {
         ok: true,

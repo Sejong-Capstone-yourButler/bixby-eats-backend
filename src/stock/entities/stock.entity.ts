@@ -9,9 +9,6 @@ import { Column, Entity, ManyToOne, OneToMany, RelationId } from 'typeorm';
 @ObjectType()
 @Entity()
 export class Stock extends CoreEntity {
-  @Field((type) => Int)
-  stockId?: number;
-
   @Field((type) => String)
   @Column()
   @IsString()
