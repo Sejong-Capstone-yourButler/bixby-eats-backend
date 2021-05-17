@@ -8,10 +8,12 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 @ObjectType()
 @Entity()
 export class Ingredient extends CoreEntity {
-  @Field((type) => Stock, { nullable: true })
+  @Field((type) => Int)
+  ingredientId?: number;
+
+  @Field((type) => Stock)
   @ManyToOne((type) => Stock, (stock) => stock.ingredients, {
     onDelete: 'CASCADE',
-    nullable: true,
     eager: true,
   })
   stock: Stock;

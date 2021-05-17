@@ -430,12 +430,26 @@ export class RestaurantService {
           error: "You can't do that.",
         };
       }
+
       await this.dishes.save([
         {
           id: editDishInput.dishId,
-          ...editDishInput,
+          name: editDishInput.name,
+          description: editDishInput.description,
+          options: editDishInput.options,
         },
       ]);
+
+      await editDishInput.ingredients.forEach(async (ingredient) => {
+        await this.ingredients.update(ingredient.ingredientId, {
+          count: ingredient.count,
+        });
+
+        await this.stocks.update(ingredient.stock.stockId, {
+          name: ingredient.stock.name,
+        });
+      });
+
       return {
         ok: true,
       };

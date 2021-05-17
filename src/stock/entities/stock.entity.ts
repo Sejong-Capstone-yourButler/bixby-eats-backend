@@ -9,6 +9,9 @@ import { Column, Entity, ManyToOne, OneToMany, RelationId } from 'typeorm';
 @ObjectType()
 @Entity()
 export class Stock extends CoreEntity {
+  @Field((type) => Int)
+  stockId?: number;
+
   @Field((type) => String)
   @Column()
   @IsString()
@@ -30,16 +33,16 @@ export class Stock extends CoreEntity {
   @Length(1, 140)
   description?: string;
 
-  @Field((type) => Restaurant)
+  @Field((type) => Restaurant, { nullable: true })
   @ManyToOne((type) => Restaurant, (restaurant) => restaurant.stock, {
     onDelete: 'CASCADE',
   })
-  restaurant: Restaurant;
+  restaurant?: Restaurant;
 
   @RelationId((stock: Stock) => stock.restaurant)
   restaurantId: number;
 
-  @Field((type) => [Ingredient])
+  @Field((type) => [Ingredient], { nullable: true })
   @OneToMany((type) => Ingredient, (ingredient) => ingredient.stock)
-  ingredients: Ingredient[];
+  ingredients?: Ingredient[];
 }

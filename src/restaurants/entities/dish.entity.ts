@@ -28,8 +28,8 @@ export class DishOption {
   name: string;
   @Field((type) => [DishChoice], { nullable: true })
   choices?: DishChoice[];
-  @Field((type) => Int, { nullable: true })
-  extra?: number;
+  @Field((type) => Int)
+  extra: number;
 }
 
 @InputType('DishInputType', { isAbstract: true })
