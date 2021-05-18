@@ -20,8 +20,6 @@ import { TakeOrderInput, TakeOrderOutput } from './dtos/take-order.dto';
 import { Order } from './entities/order.entity';
 import { OrderService } from './orders.service';
 
-const pubsub = new PubSub();
-
 @Resolver((of) => Order)
 export class OrderResolver {
   constructor(
