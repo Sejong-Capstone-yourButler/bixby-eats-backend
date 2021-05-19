@@ -17,6 +17,7 @@ import {
   UpdateCoordsInput,
   UpdateCoordsOutput,
 } from './dtos/update-coords.dto';
+import { GetCoordsOutput } from './dtos/get-coords.dto';
 
 @Injectable()
 export class UserService {
@@ -163,6 +164,23 @@ export class UserService {
       };
     } catch (error) {
       return { ok: false, error: 'Could not update latitude and longitude.' };
+    }
+  }
+
+  async getCoords(userId): Promise<GetCoordsOutput> {
+    try {
+      const user = await this.users.findOne({ id: userId });
+      const { lat, lng } = user;
+      return {
+        ok: true,
+        lat,
+        lng,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: "Can't find incomes",
+      };
     }
   }
 }

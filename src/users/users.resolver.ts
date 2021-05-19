@@ -17,6 +17,7 @@ import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { VerifyEmailInput, VerifyEmailOutput } from './dtos/verify-email.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './users.service';
+import { GetCoordsInput, GetCoordsOutput } from './dtos/get-coords.dto';
 
 @Resolver((of) => User)
 export class UserResolver {
@@ -72,5 +73,11 @@ export class UserResolver {
     @Args('input') updateCoordsInput: UpdateCoordsInput,
   ): Promise<UpdateCoordsOutput> {
     return this.usersService.updateCoords(user.id, updateCoordsInput);
+  }
+
+  @Query((returns) => GetCoordsOutput)
+  @Role(['Any'])
+  getCoords(@AuthUser() user: User): Promise<GetCoordsOutput> {
+    return this.usersService.getCoords(user.id);
   }
 }
