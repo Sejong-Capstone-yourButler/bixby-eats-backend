@@ -1,5 +1,5 @@
-import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
-import { IsString, Length } from 'class-validator';
+import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { IsNumber, IsString, Length } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { Income } from 'src/orders/entities/income.entity';
 import { Order } from 'src/orders/entities/order.entity';
@@ -29,14 +29,14 @@ export class Restaurant extends CoreEntity {
   @IsString()
   address: string;
 
-  @Field((type) => Int)
-  @Column()
-  @IsString()
+  @Field((type) => Float)
+  @Column({ type: 'float' })
+  @IsNumber()
   lat: number;
 
-  @Field((type) => Int)
-  @Column()
-  @IsString()
+  @Field((type) => Float)
+  @Column({ type: 'float' })
+  @IsNumber()
   lng: number;
 
   @Field((type) => Category, { nullable: true })

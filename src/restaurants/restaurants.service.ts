@@ -62,10 +62,18 @@ export class RestaurantService {
       // 단순히 create만 하면 TS에만 존재하고 DB에는 저장되지 않으니 .save()를 사용해야 한다.
       const newRestaurant = this.restaurants.create(createRestaurantInput);
       newRestaurant.owner = owner;
-      const category = await this.categories.getOrCreate(
-        createRestaurantInput.categoryName,
-      );
-      newRestaurant.category = category;
+      const category = await this.categories.findOne({
+        name: createRestaurantInput.categoryName,
+      });
+      if (category) {
+        newRestaurant.category = category;
+      } else {
+        newRestaurant.category = await this.categories.save(
+          this.categories.create({
+            name: createRestaurantInput.categoryName,
+          }),
+        );
+      }
       await this.restaurants.save(newRestaurant);
       return {
         ok: true,

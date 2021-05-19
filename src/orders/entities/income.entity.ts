@@ -27,6 +27,8 @@ export class Income extends CoreEntity {
   income?: number;
 
   @Field((type) => Restaurant, { nullable: true })
-  @ManyToOne((type) => Restaurant, (restaurant) => restaurant.incomes)
+  @ManyToOne((type) => Restaurant, (restaurant) => restaurant.incomes, {
+    onDelete: 'CASCADE',
+  })
   restaurant: Restaurant;
 }
