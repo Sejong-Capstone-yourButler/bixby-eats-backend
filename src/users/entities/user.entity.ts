@@ -1,6 +1,7 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import {
   Field,
+  Float,
   InputType,
   ObjectType,
   registerEnumType,
@@ -8,7 +9,13 @@ import {
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { IsBoolean, IsEmail, IsEnum, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Payment } from 'src/payments/entities/payment.entity';
@@ -44,6 +51,16 @@ export class User extends CoreEntity {
   @Field((type) => Boolean)
   @IsBoolean()
   verified: boolean;
+
+  @Field((type) => Float)
+  @Column({ type: 'float' })
+  @IsNumber()
+  lat: number;
+
+  @Field((type) => Float)
+  @Column({ type: 'float' })
+  @IsNumber()
+  lng: number;
 
   @Field((type) => [Restaurant])
   @OneToMany((type) => Restaurant, (restaurant) => restaurant.owner)

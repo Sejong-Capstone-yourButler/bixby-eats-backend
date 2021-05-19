@@ -9,10 +9,6 @@ import {
   NEW_PENDING_ORDER,
   PUB_SUB,
 } from 'src/common/common.constants';
-import {
-  GetRestaurantPositionInput,
-  GetRestaurantPositionOutput,
-} from 'src/restaurants/dtos/get-restaurant-position.dto';
 import { User } from 'src/users/entities/user.entity';
 import { CreateOrderInput, CreateOrderOutput } from './dtos/create-order.dto';
 import { EditOrderInput, EditOrderOutput } from './dtos/edit-order.dto';
@@ -126,13 +122,5 @@ export class OrderResolver {
     @Args('input') takeOrderInput: TakeOrderInput,
   ): Promise<TakeOrderOutput> {
     return this.ordersService.takeOrder(driver, takeOrderInput);
-  }
-
-  @Query((returns) => GetRestaurantPositionOutput)
-  @Role(['Any'])
-  getRestaurantPosition(
-    @Args('input') getRestaurantPositionInput: GetRestaurantPositionInput,
-  ): Promise<GetRestaurantPositionOutput> {
-    return this.ordersService.getRestaurantPosition(getRestaurantPositionInput);
   }
 }

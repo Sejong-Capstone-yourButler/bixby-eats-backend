@@ -7,10 +7,6 @@ import {
   NEW_PENDING_ORDER,
   PUB_SUB,
 } from 'src/common/common.constants';
-import {
-  GetRestaurantPositionInput,
-  GetRestaurantPositionOutput,
-} from 'src/restaurants/dtos/get-restaurant-position.dto';
 import { Dish } from 'src/restaurants/entities/dish.entity';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 import { Stock } from 'src/stock/entities/stock.entity';
@@ -44,13 +40,16 @@ export class OrderService {
     @InjectRepository(Income)
     private readonly incomes: Repository<Income>,
 
+    @InjectRepository(User)
+    private readonly users: Repository<User>,
+
     @InjectRepository(Dish)
     private readonly dishes: Repository<Dish>,
     @Inject(PUB_SUB) private readonly pubSub: PubSub,
   ) {}
   async createOrder(
     customer: User,
-    { restaurantId, items }: CreateOrderInput,
+    { restaurantId, items, lat, lng }: CreateOrderInput,
   ): Promise<CreateOrderOutput> {
     try {
       const restaurant = await this.restaurants.findOne(restaurantId);
@@ -106,6 +105,12 @@ export class OrderService {
         return new Date(day.setTime(day.getTime() + hour * 60 * 60 * 1000));
       };
       day = addHours(day, 9);
+
+      await this.users.save({
+        id: customer.id,
+        lat,
+        lng,
+      });
       const order = await this.orders.save(
         this.orders.create({
           createdAtString: day.toLocaleDateString(), // + 9:13
@@ -363,25 +368,6 @@ export class OrderService {
       return {
         ok: true,
         incomes,
-      };
-    } catch {
-      return {
-        ok: false,
-        error: "Can't find incomes",
-      };
-    }
-  }
-
-  async getRestaurantPosition({
-    restaurantId,
-  }: GetRestaurantPositionInput): Promise<GetRestaurantPositionOutput> {
-    try {
-      const restaurant = await this.restaurants.findOne({ id: restaurantId });
-      const { lat, lng } = restaurant;
-      return {
-        ok: true,
-        lat,
-        lng,
       };
     } catch {
       return {

@@ -1,4 +1,11 @@
-import { Field, InputType, Int, ObjectType, PickType } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  InputType,
+  Int,
+  ObjectType,
+  PickType,
+} from '@nestjs/graphql';
 import { CoreOutput } from 'src/common/dtos/output.dto';
 import { OrderItemOption } from '../entities/order-item.entity';
 
@@ -18,6 +25,12 @@ export class CreateOrderInput {
 
   @Field((type) => [CreateOrderItemInput])
   items: CreateOrderItemInput[];
+
+  @Field((type) => Float)
+  lat?: number;
+
+  @Field((type) => Float)
+  lng?: number;
 }
 
 @ObjectType()

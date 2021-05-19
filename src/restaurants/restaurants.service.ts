@@ -22,6 +22,10 @@ import {
 } from './dtos/edit-restaurant.dto';
 import { GetDishInput, GetDishOutput } from './dtos/get-dish.dto';
 import { GetDishsInput, GetDishsOutput } from './dtos/get-dishs.dto';
+import {
+  GetRestaurantPositionInput,
+  GetRestaurantPositionOutput,
+} from './dtos/get-restaurant-position.dto';
 import { MyRestaurantInput, MyRestaurantOutput } from './dtos/my-restaurant';
 import { MyRestaurantsOutput } from './dtos/my-restaurants.dto';
 import { RestaurantInput, RestaurantOutput } from './dtos/restaurant.dto';
@@ -561,6 +565,25 @@ export class RestaurantService {
       return {
         ok: false,
         error: 'Could not find restaurant',
+      };
+    }
+  }
+
+  async getRestaurantPosition({
+    restaurantId,
+  }: GetRestaurantPositionInput): Promise<GetRestaurantPositionOutput> {
+    try {
+      const restaurant = await this.restaurants.findOne({ id: restaurantId });
+      const { lat, lng } = restaurant;
+      return {
+        ok: true,
+        lat,
+        lng,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: "Can't find incomes",
       };
     }
   }

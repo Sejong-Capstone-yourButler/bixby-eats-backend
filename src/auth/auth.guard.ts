@@ -16,11 +16,12 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext) {
-    console.log('AuthGuard');
+    console.log('AuthGuard on auth.guard.ts');
     const roles = this.reflector.get<AllowedRoles>(
       'roles',
       context.getHandler(),
     );
+    console.log(roles);
     if (!roles) {
       return true;
     }

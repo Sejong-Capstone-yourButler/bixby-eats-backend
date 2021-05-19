@@ -8,11 +8,15 @@ import {
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { User } from './entities/user.entity';
 import { JwtService } from 'src/jwt/jwt.service';
-import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dot';
+import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
 import { UserProfileOutput } from './dtos/user-profile.dto';
 import { VerifyEmailOutput } from './dtos/verify-email.dto';
 import { MailService } from 'src/mail/mail.service';
+import {
+  UpdateCoordsInput,
+  UpdateCoordsOutput,
+} from './dtos/update-coords.dto';
 
 @Injectable()
 export class UserService {
@@ -38,7 +42,7 @@ export class UserService {
         return { ok: false, error: 'There is a user with that email already' };
       }
       const user = await this.users.save(
-        this.users.create({ email, password, role }),
+        this.users.create({ email, password, role, lat: 0, lng: 0 }),
       );
       const verification = await this.verifications.save(
         this.verifications.create({
@@ -136,6 +140,29 @@ export class UserService {
       return { ok: false, error: 'Verification not found.' };
     } catch (error) {
       return { ok: false, error: 'Could not verify email.' };
+    }
+  }
+
+  async updateCoords(
+    userId,
+    { lat, lng }: UpdateCoordsInput,
+  ): Promise<UpdateCoordsOutput> {
+    try {
+      const user = await this.users.findOne(userId);
+      if (lat) {
+        user.lat = lat;
+      }
+      if (lng) {
+        user.lng = lng;
+      }
+      await this.users.save(user);
+      return {
+        ok: true,
+        lat,
+        lng,
+      };
+    } catch (error) {
+      return { ok: false, error: 'Could not update latitude and longitude.' };
     }
   }
 }
