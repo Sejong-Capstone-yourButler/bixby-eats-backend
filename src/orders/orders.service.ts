@@ -288,7 +288,7 @@ export class OrderService {
               income: income.income + order.total,
             });
           } catch {
-            const income = await this.incomes.save(
+            await this.incomes.save(
               this.incomes.create({
                 createdAtString: order.createdAtString,
                 income: order.total,

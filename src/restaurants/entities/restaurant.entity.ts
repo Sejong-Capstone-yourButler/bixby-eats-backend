@@ -5,15 +5,7 @@ import { Income } from 'src/orders/entities/income.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Stock } from 'src/stock/entities/stock.entity';
 import { User } from 'src/users/entities/user.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  RelationId,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, RelationId } from 'typeorm';
 import { Category } from './category.entity';
 import { Dish } from './dish.entity';
 
@@ -36,6 +28,16 @@ export class Restaurant extends CoreEntity {
   @Column()
   @IsString()
   address: string;
+
+  @Field((type) => Int)
+  @Column()
+  @IsString()
+  lat: number;
+
+  @Field((type) => Int)
+  @Column()
+  @IsString()
+  lng: number;
 
   @Field((type) => Category, { nullable: true })
   @ManyToOne((type) => Category, (category) => category.restaurants, {
