@@ -7,6 +7,10 @@ import {
   NEW_PENDING_ORDER,
   PUB_SUB,
 } from 'src/common/common.constants';
+import {
+  GetRestaurantPositionInput,
+  GetRestaurantPositionOutput,
+} from 'src/restaurants/dtos/get-restaurant-position.dto';
 import { Dish } from 'src/restaurants/entities/dish.entity';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 import { Stock } from 'src/stock/entities/stock.entity';
@@ -359,6 +363,25 @@ export class OrderService {
       return {
         ok: true,
         incomes,
+      };
+    } catch {
+      return {
+        ok: false,
+        error: "Can't find incomes",
+      };
+    }
+  }
+
+  async getRestaurantPosition({
+    restaurantId,
+  }: GetRestaurantPositionInput): Promise<GetRestaurantPositionOutput> {
+    try {
+      const restaurant = await this.restaurants.findOne({ id: restaurantId });
+      const { lat, lng } = restaurant;
+      return {
+        ok: true,
+        lat,
+        lng,
       };
     } catch {
       return {
