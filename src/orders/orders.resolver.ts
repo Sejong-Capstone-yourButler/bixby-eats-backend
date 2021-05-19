@@ -17,6 +17,10 @@ import { GetOrderInput, GetOrderOutput } from './dtos/get-order.dto';
 import { GetOrdersInput, GetOrdersOutput } from './dtos/get-orders.dto';
 import { OrderUpdatesInput } from './dtos/order-update.dto';
 import { TakeOrderInput, TakeOrderOutput } from './dtos/take-order.dto';
+import {
+  UpdateCoordsInput,
+  UpdateCoordsOutput,
+} from './dtos/update-coords.dto';
 import { Order } from './entities/order.entity';
 import { OrderService } from './orders.service';
 
@@ -122,5 +126,14 @@ export class OrderResolver {
     @Args('input') takeOrderInput: TakeOrderInput,
   ): Promise<TakeOrderOutput> {
     return this.ordersService.takeOrder(driver, takeOrderInput);
+  }
+
+  @Mutation((returns) => UpdateCoordsOutput)
+  @Role(['Any'])
+  updateCoords(
+    @AuthUser() user: User,
+    @Args('input') updateCoordsInput: UpdateCoordsInput,
+  ): Promise<UpdateCoordsOutput> {
+    return this.ordersService.updateCoords(user.id, updateCoordsInput);
   }
 }

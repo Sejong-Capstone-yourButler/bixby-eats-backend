@@ -14,8 +14,8 @@ import { UserProfileOutput } from './dtos/user-profile.dto';
 import { VerifyEmailOutput } from './dtos/verify-email.dto';
 import { MailService } from 'src/mail/mail.service';
 import {
-  UpdateCoordsInput,
-  UpdateCoordsOutput,
+  UpdateUserCoordsInput,
+  UpdateUserCoordsOutput,
 } from './dtos/update-coords.dto';
 import { GetCoordsOutput } from './dtos/get-coords.dto';
 
@@ -146,8 +146,8 @@ export class UserService {
 
   async updateCoords(
     userId,
-    { lat, lng }: UpdateCoordsInput,
-  ): Promise<UpdateCoordsOutput> {
+    { lat, lng }: UpdateUserCoordsInput,
+  ): Promise<UpdateUserCoordsOutput> {
     try {
       const user = await this.users.findOne(userId);
       if (lat) {

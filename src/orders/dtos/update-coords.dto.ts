@@ -2,7 +2,7 @@ import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { CoreOutput } from 'src/common/dtos/output.dto';
 
 @InputType()
-export class UpdateUserCoordsInput {
+export class UpdateCoordsInput {
   @Field((type) => Float)
   lat?: number;
 
@@ -11,7 +11,7 @@ export class UpdateUserCoordsInput {
 }
 
 @ObjectType()
-export class UpdateUserCoordsOutput extends CoreOutput {
+export class UpdateCoordsOutput extends CoreOutput {
   @Field((type) => Float)
   lat?: number;
 

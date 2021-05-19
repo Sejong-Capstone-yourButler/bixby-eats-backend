@@ -9,8 +9,8 @@ import {
 } from './dtos/create-account.dto';
 import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
 import {
-  UpdateCoordsInput,
-  UpdateCoordsOutput,
+  UpdateUserCoordsInput,
+  UpdateUserCoordsOutput,
 } from './dtos/update-coords.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
@@ -66,12 +66,12 @@ export class UserResolver {
     return this.usersService.verifyEmail(code);
   }
 
-  @Mutation((returns) => UpdateCoordsOutput)
+  @Mutation((returns) => UpdateUserCoordsOutput)
   @Role(['Any'])
   updateCoords(
     @AuthUser() user: User,
-    @Args('input') updateCoordsInput: UpdateCoordsInput,
-  ): Promise<UpdateCoordsOutput> {
+    @Args('input') updateCoordsInput: UpdateUserCoordsInput,
+  ): Promise<UpdateUserCoordsOutput> {
     return this.usersService.updateCoords(user.id, updateCoordsInput);
   }
 
