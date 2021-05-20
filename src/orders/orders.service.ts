@@ -108,7 +108,7 @@ export class OrderService {
       const addHours = (day, hour) => {
         return new Date(day.setTime(day.getTime() + hour * 60 * 60 * 1000));
       };
-      day = addHours(day, 9);
+      // day = addHours(day, 9);
 
       await this.users.save({
         id: customer.id,
