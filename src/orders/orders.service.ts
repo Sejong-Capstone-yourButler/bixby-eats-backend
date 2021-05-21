@@ -105,10 +105,10 @@ export class OrderService {
         orderItems.push(orderItem);
       }
       let day = new Date();
-      // const addHours = (day, hour) => {
-      //   return new Date(day.setTime(day.getTime() + hour * 60 * 60 * 1000));
-      // };
-      // day = addHours(day, 9);
+      const addHours = (day, hour) => {
+        return new Date(day.setTime(day.getTime() + hour * 60 * 60 * 1000));
+      };
+      day = addHours(day, 9);
 
       await this.users.save({
         id: customer.id,
