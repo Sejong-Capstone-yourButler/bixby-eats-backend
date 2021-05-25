@@ -17,7 +17,7 @@ import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { VerifyEmailInput, VerifyEmailOutput } from './dtos/verify-email.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './users.service';
-import { GetCoordsInput, GetCoordsOutput } from './dtos/get-coords.dto';
+import { GetCoordsOutput } from './dtos/get-coords.dto';
 
 @Resolver((of) => User)
 export class UserResolver {
