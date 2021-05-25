@@ -68,11 +68,11 @@ export class UserResolver {
 
   @Mutation((returns) => UpdateUserCoordsOutput)
   @Role(['Any'])
-  updateCoords(
+  updateUserCoords(
     @AuthUser() user: User,
     @Args('input') updateCoordsInput: UpdateUserCoordsInput,
   ): Promise<UpdateUserCoordsOutput> {
-    return this.usersService.updateCoords(user.id, updateCoordsInput);
+    return this.usersService.updateUserCoords(user.id, updateCoordsInput);
   }
 
   @Query((returns) => GetCoordsOutput)

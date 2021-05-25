@@ -144,7 +144,7 @@ export class UserService {
     }
   }
 
-  async updateCoords(
+  async updateUserCoords(
     userId,
     { lat, lng }: UpdateUserCoordsInput,
   ): Promise<UpdateUserCoordsOutput> {
