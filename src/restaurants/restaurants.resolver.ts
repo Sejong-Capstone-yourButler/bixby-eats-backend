@@ -120,6 +120,16 @@ export class RestaurantResolver {
   ): Promise<SearchRestaurantOutput> {
     return this.restaurantService.searchRestaurantByName(searchRestaurantInput);
   }
+
+  @Query((returns) => GetRestaurantPositionOutput)
+  @Role(['Any'])
+  getRestaurantPosition(
+    @Args('input') getRestaurantPositionInput: GetRestaurantPositionInput,
+  ): Promise<GetRestaurantPositionOutput> {
+    return this.restaurantService.getRestaurantPosition(
+      getRestaurantPositionInput,
+    );
+  }
 }
 
 @Resolver((of) => Category)
@@ -183,15 +193,5 @@ export class DishResolver {
     @Args('input') getDishInput: GetDishInput,
   ): Promise<GetDishOutput> {
     return this.restaurantService.getDish(owner, getDishInput);
-  }
-
-  @Query((returns) => GetRestaurantPositionOutput)
-  @Role(['Any'])
-  getRestaurantPosition(
-    @Args('input') getRestaurantPositionInput: GetRestaurantPositionInput,
-  ): Promise<GetRestaurantPositionOutput> {
-    return this.restaurantService.getRestaurantPosition(
-      getRestaurantPositionInput,
-    );
   }
 }
