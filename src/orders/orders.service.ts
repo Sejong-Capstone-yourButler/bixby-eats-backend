@@ -18,10 +18,6 @@ import { GetIncomesInput, GetIncomesOutput } from './dtos/get-incomes.dto';
 import { GetOrderInput, GetOrderOutput } from './dtos/get-order.dto';
 import { GetOrdersInput, GetOrdersOutput } from './dtos/get-orders.dto';
 import { TakeOrderInput, TakeOrderOutput } from './dtos/take-order.dto';
-import {
-  UpdateCoordsInput,
-  UpdateCoordsOutput,
-} from './dtos/update-coords.dto';
 import { Income } from './entities/income.entity';
 import { OrderItem } from './entities/order-item.entity';
 import { Order, OrderStatus } from './entities/order.entity';
@@ -378,29 +374,6 @@ export class OrderService {
         ok: false,
         error: "Can't find incomes",
       };
-    }
-  }
-
-  async updateCoords(
-    userId,
-    { lat, lng }: UpdateCoordsInput,
-  ): Promise<UpdateCoordsOutput> {
-    try {
-      const user = await this.users.findOne(userId);
-      if (lat) {
-        user.lat = lat;
-      }
-      if (lng) {
-        user.lng = lng;
-      }
-      await this.users.save(user);
-      return {
-        ok: true,
-        lat,
-        lng,
-      };
-    } catch (error) {
-      return { ok: false, error: 'Could not update latitude and longitude.' };
     }
   }
 }
