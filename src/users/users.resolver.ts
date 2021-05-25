@@ -11,7 +11,7 @@ import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
 import {
   UpdateUserCoordsInput,
   UpdateUserCoordsOutput,
-} from './dtos/update-coords.dto';
+} from './dtos/update-user-coords.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import { VerifyEmailInput, VerifyEmailOutput } from './dtos/verify-email.dto';

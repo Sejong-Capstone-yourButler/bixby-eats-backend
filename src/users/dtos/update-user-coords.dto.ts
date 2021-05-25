@@ -1,4 +1,4 @@
-import { Field, Float, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, InputType, ObjectType } from '@nestjs/graphql';
 import { CoreOutput } from 'src/common/dtos/output.dto';
 
 @InputType()

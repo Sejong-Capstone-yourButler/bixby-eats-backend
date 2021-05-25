@@ -16,7 +16,7 @@ import { MailService } from 'src/mail/mail.service';
 import {
   UpdateUserCoordsInput,
   UpdateUserCoordsOutput,
-} from './dtos/update-coords.dto';
+} from './dtos/update-user-coords.dto';
 import { GetCoordsOutput } from './dtos/get-coords.dto';
 
 @Injectable()
