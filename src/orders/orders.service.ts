@@ -364,7 +364,13 @@ export class OrderService {
   }: GetIncomesInput): Promise<GetIncomesOutput> {
     try {
       const restaurant = await this.restaurants.findOne({ id: restaurantId });
-      const incomes = await this.incomes.find({ restaurant });
+      const incomes = await this.incomes.find({
+        where: { restaurant },
+        order: {
+          createdAt: 'ASC',
+        },
+      });
+
       return {
         ok: true,
         incomes,
