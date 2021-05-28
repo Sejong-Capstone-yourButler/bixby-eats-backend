@@ -162,6 +162,9 @@ export class OrderService {
             owner: user,
             id: restaurantId,
           },
+          order: {
+            createdAt: 'ASC',
+          },
           relations: ['orders'], // relations을 추가함으로써 OneToMany같은 관계형 field를 불러올 수 있다.
         });
         orders = restaurant.orders;
