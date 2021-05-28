@@ -148,12 +148,18 @@ export class OrderService {
             customer: user,
             ...(status && { status }),
           },
+          order: {
+            id: 'ASC',
+          },
         });
       } else if (user.role === UserRole.Delivery) {
         orders = await this.orders.find({
           where: {
             driver: user,
             ...(status && { status }),
+          },
+          order: {
+            id: 'ASC',
           },
         });
       } else if (user.role === UserRole.Owner) {
@@ -163,7 +169,7 @@ export class OrderService {
             id: restaurantId,
           },
           order: {
-            createdAt: 'ASC',
+            id: 'ASC',
           },
           relations: ['orders'], // relations을 추가함으로써 OneToMany같은 관계형 field를 불러올 수 있다.
         });
@@ -172,6 +178,7 @@ export class OrderService {
           orders = orders.filter((order) => order.status === status);
         }
       }
+      console.log(orders);
       return {
         ok: true,
         orders,
