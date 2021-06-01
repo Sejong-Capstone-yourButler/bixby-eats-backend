@@ -583,7 +583,7 @@ export class RestaurantService {
     } catch {
       return {
         ok: false,
-        error: "Can't find incomes",
+        error: "Can't find position",
       };
     }
   }
