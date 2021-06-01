@@ -381,7 +381,7 @@ export class OrderService {
 
       return {
         ok: true,
-        incomes,
+        incomes: incomes.slice(-7, incomes.length),
       };
     } catch {
       return {
