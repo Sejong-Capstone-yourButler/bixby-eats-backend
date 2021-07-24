@@ -86,6 +86,7 @@ export class UserService {
         token,
       };
     } catch (error) {
+      console.log(error);
       return {
         ok: false,
         error: "Can't log user in.",

@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { UserService } from 'src/users/users.service';
 import { JwtService } from './jwt.service';
 
+// subscription을 하게 되면 http header를 사용할 수 없기 때문에 jwt middleware는 필요가 없어진다.
 @Injectable()
 export class JwtMiddleware implements NestMiddleware {
   constructor(
@@ -19,6 +20,7 @@ export class JwtMiddleware implements NestMiddleware {
           const { user, ok } = await this.userService.findById(decoded['id']);
           if (ok) {
             req['user'] = user;
+            console.log(user);
           }
         }
       } catch (e) {}

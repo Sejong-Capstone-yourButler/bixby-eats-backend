@@ -5,9 +5,11 @@ import { JwtService } from 'src/jwt/jwt.service';
 import { UserService } from 'src/users/users.service';
 import { AllowedRoles } from './role.decorator';
 
+// true를 반환하면 request를 진행시키고 false면 멈춘다.
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
+    // Reflector는 SetMetadata('roles', roles); 인 metadata에 접근할 수 있게 해준다.
     private readonly reflector: Reflector,
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
@@ -19,6 +21,7 @@ export class AuthGuard implements CanActivate {
       'roles',
       context.getHandler(),
     );
+
     if (!roles) {
       return true;
     }
@@ -35,6 +38,8 @@ export class AuthGuard implements CanActivate {
     }
     if (token) {
       const decoded = this.jwtService.verify(token.toString());
+      console.log(decoded);
+      console.log('decoded');
       if (typeof decoded === 'object' && decoded.hasOwnProperty('id')) {
         const { user } = await this.userService.findById(decoded['id']);
         if (user) {

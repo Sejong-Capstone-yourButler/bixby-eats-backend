@@ -282,6 +282,8 @@ export class RestaurantService {
     try {
       const [restaurants, totalResults] = await this.restaurants.findAndCount({
         where: {
+          // RAW : raw sql query를 실행할 수 있도록 해준다.
+          // %${query}%는 query가 포함된 값을 찾아준다.
           name: Raw((name) => `${name} ILIKE '%${query}%'`),
         },
         skip: (page - 1) * 3,

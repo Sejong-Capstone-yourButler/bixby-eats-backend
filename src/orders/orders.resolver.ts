@@ -75,12 +75,16 @@ export class OrderResolver {
   @Subscription((returns) => Order, {
     // first arg is payload
     // second arg is variable of resolver below
+    // third arg is context
     filter: ({ pendingOrders: { ownerId } }, _, { user }) => {
       return ownerId === user.id;
     },
 
     // resolve는 사용자가 받는 update의 알림의 형태를 바꿔준다.
     // 인자로는 subscription의 이름을 받는다.
+    // @Subscription에서 Order를 return한다고 해도
+    // payload에 여러 값들이 있음면 order 이외에 값도 반환한다.
+    // 그래서 resolve로 order만 반환하게 조작해야 한다.
     resolve: ({ pendingOrders: { order } }) => order,
   })
   @Role(['Owner'])

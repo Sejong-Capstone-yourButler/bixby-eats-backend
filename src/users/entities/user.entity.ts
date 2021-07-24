@@ -28,6 +28,9 @@ export enum UserRole {
 
 registerEnumType(UserRole, { name: 'UserRole' });
 
+// relationship 때문에 ObjectType과 InputType이 동시에 존재해서
+// server가 에러를 발생시킨다. 이 때문에 InputType에 'UserInputType'
+// 이라고 이름을 지정해줘야 한다.
 @InputType('UserInputType', { isAbstract: true })
 @ObjectType()
 @Entity()
@@ -80,7 +83,6 @@ export class User extends CoreEntity {
   rides: Order[];
 
   @BeforeInsert()
-  @BeforeUpdate()
   async hashPassword(): Promise<void> {
     if (this.password) {
       try {

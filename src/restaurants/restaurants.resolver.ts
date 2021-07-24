@@ -136,18 +136,21 @@ export class RestaurantResolver {
 export class CategoryResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
-  // ResolveField는 매 request마다 계산된 Field를 만들어준다.
-  @ResolveField((type) => Int)
+  // ResolveField는 entity나 db에 존재하지 않고
+  // 매 request마다 계산된 Field를 만들어준다.
+  @ResolveField((returns) => Int)
+  // @Parent는 instance의 부모를 가져온다. 즉 restaurantCount의 Parent는
+  // Category다. A라는 카테고리의 정보를 가져온다.
   restaurantCount(@Parent() category: Category): Promise<number> {
     return this.restaurantService.countRestaurants(category);
   }
 
-  @Query((type) => AllCategoriesOutput)
+  @Query((returns) => AllCategoriesOutput)
   allCategories(): Promise<AllCategoriesOutput> {
     return this.restaurantService.allCategories();
   }
 
-  @Query((type) => CategoryOutput)
+  @Query((returns) => CategoryOutput)
   category(
     @Args('input') categoryInput: CategoryInput,
   ): Promise<CategoryOutput> {
@@ -159,7 +162,7 @@ export class CategoryResolver {
 export class DishResolver {
   constructor(private readonly restaurantService: RestaurantService) {}
 
-  @Mutation((type) => CreateDishOutput)
+  @Mutation((returns) => CreateDishOutput)
   @Role(['Owner'])
   createDish(
     @AuthUser() owner: User,
@@ -168,7 +171,7 @@ export class DishResolver {
     return this.restaurantService.createDish(owner, createDishInput);
   }
 
-  @Mutation((type) => EditDishOutput)
+  @Mutation((returns) => EditDishOutput)
   @Role(['Owner'])
   editDish(
     @AuthUser() owner: User,
@@ -177,7 +180,7 @@ export class DishResolver {
     return this.restaurantService.editDish(owner, editDishInput);
   }
 
-  @Mutation((type) => DeleteDishOutput)
+  @Mutation((returns) => DeleteDishOutput)
   @Role(['Owner'])
   deleteDish(
     @AuthUser() owner: User,
@@ -186,7 +189,7 @@ export class DishResolver {
     return this.restaurantService.deleteDish(owner, deleteDishInput);
   }
 
-  @Query((type) => GetDishOutput)
+  @Query((returns) => GetDishOutput)
   @Role(['Owner'])
   getDish(
     @AuthUser() owner: User,

@@ -85,7 +85,7 @@ import { Income } from './orders/entities/income.entity';
     // GraphQLModule처럼 설정이 있으면 Dynamic Module이다.
     GraphQLModule.forRoot({
       playground: process.env.NODE_ENV !== 'production',
-      installSubscriptionHandlers: true,
+      installSubscriptionHandlers: true, // 서버가 웹 소켓 기능을 가지게 한다.
       autoSchemaFile: true,
 
       // Grapql context에 { user : req['user'] }
